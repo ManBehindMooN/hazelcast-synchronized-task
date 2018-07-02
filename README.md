@@ -66,9 +66,9 @@ It needs an valid (cluster) Hazelcast configuration. There are several ways (Jav
 
 # AbstractSynchronizedTask
 
-This implementation allows to synchronize services or task over several instances. The threads are synchronized with the Hazelcast implementation. The `AbstractSynchronizedTask` has an interface `SynchronizedTask` and can be used to inject implementations. 
+This implementation allows to synchronize services or tasks over several instances. The threads are synchronized with the Hazelcast implementation. The `AbstractSynchronizedTask` has an interface `SynchronizedTask` and can be used to inject implementations. 
 
-This implementation allows only instances with a max lease time for a thread. It has been done intentionally to avoid implementations which could cause a blocking thread. Optionally a minimum lease time could be set as the thread will be synchronized over the network it might take a couple of milliseconds.
+This implementation allows only instances with a min and max lease time for a thread. It has been done intentionally to avoid implementations which could cause a blocking thread. A minimum lease time has to be set as the tasks will be synchronized over the network it might take a couple of milliseconds.
 
 The final method `runSynchronizedTask` synchronizes the threads on each node. Its default behavior allows that only one task can run at the time and all others will be aborted. This behavior can be overwritten by taking responsibility over the lock. For further information please refer to the below examples and the java documentation.
 
