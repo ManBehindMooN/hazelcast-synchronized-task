@@ -66,9 +66,9 @@ It needs an valid (cluster) Hazelcast configuration. There are several ways (Jav
 
 # AbstractSynchronizedTask
 
-This implementation allows to synchronize services or tasks over several instances. The threads are synchronized with the Hazelcast implementation. The `AbstractSynchronizedTask` has an interface `SynchronizedTask` and can be used to inject implementations. 
+This implementation allows to synchronize services or (scheduled) tasks over several instances. The (local) threads are synchronized with the Hazelcast implementation. The `AbstractSynchronizedTask` has an interface `SynchronizedTask` and can be used to inject implementations. 
 
-This implementation allows only instances with a minimum and maximum lease time for a thread. It has been done intentionally to avoid implementations which could cause a blocking thread. A minimum lease time has to be set as the tasks will be synchronized over the network it might take a couple of milliseconds.
+This implementation allows only instances with a minimum and maximum lease time for a thread. This has been done intentionally to avoid implementations which could cause a blocking thread. A minimum lease time has to be set as the tasks will be synchronized over the network and it might take a couple of milliseconds.
 
 The final method `runSynchronizedTask` synchronizes the threads on each node. Its default behavior allows that only one task can run at the time and all others will be aborted. This behavior can be overwritten by taking responsibility over the lock. For further information please refer to the below examples and the java documentation.
 
@@ -86,11 +86,14 @@ The service can be injected with the `SynchronizedTask` interface like:
     
     ....
     
-    ... {
-        ...
-        syncService.runSynchronizedTask();
-        ...
-        }
+    	... {
+    
+			...
+      
+			syncService.runSynchronizedTask();
+      
+			...
+    	}
     
 
 The service implementation could look like:
@@ -99,14 +102,14 @@ The service implementation could look like:
     @Service("MySyncService")
     public class SynchronizedService extends AbstractSynchronizedTask {
     
-        //use external configurations whenever possible!
+        // use external configurations whenever possible!
         public SynchronizedService(@Autowirded HazelcastInstance hzInstance) {
             super(hzInstance, "uniqueId", 5_000L, 30L, TimeUnit.SECONDS);
         }
     
         @Override
         public void task() {
-            System.out.println("SynchronizedService: TEST");
+            logInfo("SynchronizedService: TEST");
         }
     }
 
@@ -119,8 +122,8 @@ The service implementation could look like:
         public SynchronizedTask(@Autowired HazelcastInstance hzInstance) {
             super(hzInstance, "uniqueId", 5_000L, 30L, TimeUnit.SECONDS);
         }
-    
-    	  //use external configurations whenever possible!
+        
+        // use external configurations whenever possible!
         @Scheduled(cron = "0 * * * * *")
         public void scheduler() {
             runSynchronizedTask();
@@ -128,7 +131,7 @@ The service implementation could look like:
     
         @Override
         public void task() {
-            System.out.println("SynchronizedTask: TEST");
+            logInfo("SynchronizedTask: TEST");
         }
     }
 
@@ -150,16 +153,19 @@ The service implementation could look like:
 		
 		@Override
 		public void task() {
-		    System.out.println("SynchronizedWaitTask: TEST");
+		    logInfo("SynchronizedWaitTask: TEST");
 		}
 		
 		@Override
 		protected boolean isWaitingActive() {
-		    return true;
+			logInfo("Active waiting enabled.");
+			return true;
 		}
 		
 		@Override
 		protected void waiting(ILock lock) throws Exception {
+		
+			logInfo("Try to acquire lock.");
 		
 			final String msg = format("Could %sacquire lock after %d seconds.", "%s", getLeaseUnit().toSeconds(getLeaseTime()));
 			final String not = "not ";

@@ -75,8 +75,7 @@ public class ActiveWaitingSynchronizedTaskTest {
 		public void task() {
 			assertTrue(latch.getCount() > 0);
 			latch.countDown();
-			System.out.println(String.format("[%s] %s: actual count '%d'", getClass().getSimpleName(), getKey(),
-					latch.getCount()));
+			System.out.println(String.format("[%s] %s: actual count '%d'", getClass().getSimpleName(), getKey(), latch.getCount()));
 		}
 
 		@Override

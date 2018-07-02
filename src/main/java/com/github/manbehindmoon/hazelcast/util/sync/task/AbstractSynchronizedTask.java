@@ -12,8 +12,7 @@ import com.hazelcast.core.ILock;
 
 /**
  * This abstract implementation of the interface {@link SynchronizedTask} implements
- * the synchronized task with Hazelcast over all nodes within the same
- * cluster/key
+ * the synchronized task with Hazelcast over all nodes within the same cluster/key
  */
 public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 
@@ -40,16 +39,14 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	 * @param maxLeaseTime         this is the max lease time a thread can be locked
 	 * @param maxLeaseTimeUnit     the time unit for the max lease time
 	 */
-	public AbstractSynchronizedTask(final HazelcastInstance hzInstance, final String key, final long minLeaseTimeInMillis,
-			final long maxLeaseTime, final TimeUnit maxLeaseTimeUnit) {
+	public AbstractSynchronizedTask(final HazelcastInstance hzInstance, final String key, final long minLeaseTimeInMillis, final long maxLeaseTime, final TimeUnit maxLeaseTimeUnit) {
 
 		Assert.notNull(hzInstance, "hazelcast instance is not allowed to be null.");
 		Assert.notNull(key, "key is not allowed to be null.");
 		Assert.isTrue(maxLeaseTime > 0, "maxLeaseTime must be greater than zero");
 		Assert.notNull(maxLeaseTimeUnit, "maxLeaseTimeUnit is not allowed to be null.");
 		Assert.isTrue(minLeaseTimeInMillis > 0, "minLeaseTime must be null or greater than zero");
-		Assert.isTrue(minLeaseTimeInMillis < maxLeaseTimeUnit.toMillis(maxLeaseTime),
-				"minLeaseTime must be smaller than maxLeaseTime.");
+		Assert.isTrue(minLeaseTimeInMillis < maxLeaseTimeUnit.toMillis(maxLeaseTime), "minLeaseTime must be smaller than maxLeaseTime.");
 
 		this.hzInstance = hzInstance;
 		this.key = key;
@@ -97,11 +94,10 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 			task();
 			logInfo("Finished task()");
 
-			// calculate min lease time
+			// calculate if the minimum lease time has elapsed 
 			final long runTime = System.currentTimeMillis() - startTime;
 			if (runTime < minLeaseTimeInMillis) {
-				logInfo(format("The task's runtime was %d ms and therefore minimum lease time [%d ms] is still active.", runTime,
-						minLeaseTimeInMillis));
+				logInfo(format("The task's runtime was %d ms and therefore minimum lease time [%d ms] is still active.", runTime, minLeaseTimeInMillis));
 				Thread.sleep(minLeaseTimeInMillis - runTime);
 			}
 
@@ -122,7 +118,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	}
 
 	/**
-	 * If a thread is locked and this method returns false then the synchronized run
+	 * If a thread is locked and this method returns {@code false} then the synchronized run
 	 * method will be aborted. This is the default behavior.
 	 *
 	 * This method must be manually overwritten for each implementation and the
