@@ -11,7 +11,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ILock;
 
 /**
- * This abstract implementation of interface {@link SynchronizedTask} implements
+ * This abstract implementation of the interface {@link SynchronizedTask} implements
  * the synchronized task with Hazelcast over all nodes within the same
  * cluster/key
  */
@@ -65,15 +65,15 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 		final ILock lock = hzInstance.getLock(key);
 
 		if (lock.isLocked()) {
-			logInfo("Thread is locked.");
+			logInfo("The lock is already locked by another thread.");
 			if (isWaitingActive()) {
 				logInfo("Active waiting...");
 				try {
 					waiting(lock);
 					if (lock.isLockedByCurrentThread()) {
-						logInfo("Lock acquired after active waiting.");
+						logInfo("The lock was acquired by the current thread after active waiting.");
 					} else {
-						logWarn("Lock is not acquired by current thread after active waiting.");
+						logWarn("The lock could not have been acquired by the current thread after active waiting.");
 						return;
 					}
 				} catch (Exception e) {
@@ -81,11 +81,11 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 					return;
 				}
 			} else {
-				logInfo("Lock not acquired. No active waiting.");
+				logInfo("The lock was not acquired by the current thread. No active waiting.");
 				return;
 			}
 		} else {
-			logInfo("Lock directly acquired.");
+			logInfo("The lock was directly acquired by the current thread.");
 			lock.lock(leaseTime, leaseUnit);
 		}
 
@@ -100,7 +100,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 			// calculate min lease time
 			final long runTime = System.currentTimeMillis() - startTime;
 			if (runTime < minLeaseTimeInMillis) {
-				logInfo(format("Runtime was '%d' and therefore minimum lease time [%d] is active.", runTime,
+				logInfo(format("The task's runtime was %d ms and therefore minimum lease time [%d ms] is still active.", runTime,
 						minLeaseTimeInMillis));
 				Thread.sleep(minLeaseTimeInMillis - runTime);
 			}
@@ -115,7 +115,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 			} else {
 				// this might be an indication that the min and max lease time in combination
 				// with the task (run time) and schedule time is not optimized
-				logWarn("Thread is not locked anymore by current thread.");
+				logWarn("The lock is not locked anymore by the current thread.");
 			}
 		}
 
@@ -128,7 +128,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	 * This method must be manually overwritten for each implementation and the
 	 * {@link #waiting(ILock)} must be implemented as well.
 	 *
-	 * @return boolean (default false)
+	 * @return boolean (default {@code false})
 	 */
 	protected boolean isWaitingActive() {
 
@@ -136,8 +136,8 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	}
 
 	/**
-	 * If the {@link #isWaitingActive()} returns true then the responsibility of the
-	 * lock lies within the implementation. This method must acquire the lock or
+	 * If the {@link #isWaitingActive()} returns {@code true} then the responsibility of the
+	 * lock lies within this method implementation. This method must acquire the lock or
 	 * throw a meaningful exception.
 	 *
 	 * Default implementation throws a {@link IllegalArgumentException} exception.
@@ -146,12 +146,12 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	 * @throws Exception with a meaningful message as it will be logged.
 	 */
 	protected void waiting(final ILock lock) throws Exception {
-		throw new IllegalArgumentException("Default waiting method implementation");
+		throw new IllegalArgumentException("Default waiting method implementation. Please overwrite.");
 	}
 
 	/**
 	 * This method is being called by the {@link #runSynchronizedTask()} when a lock
-	 * could have been acquired. This method has the task workload implementation.
+	 * could have been acquired. This method contains the task workload implementation.
 	 */
 	public abstract void task();
 
@@ -175,17 +175,17 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 		return leaseUnit;
 	}
 
-	private void logInfo(String msg) {
+	public final void logInfo(String msg) {
 
 		LOG.info(logPrefix + msg);
 	}
 
-	private void logWarn(String msg) {
+	public final  void logWarn(String msg) {
 
 		LOG.warn(logPrefix + msg);
 	}
 
-	private void logError(String msg, Throwable e) {
+	public final  void logError(String msg, Throwable e) {
 		LOG.error(logPrefix + msg, e);
 	}
 

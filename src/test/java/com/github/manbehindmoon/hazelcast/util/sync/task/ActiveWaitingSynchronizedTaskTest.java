@@ -1,5 +1,6 @@
 package com.github.manbehindmoon.hazelcast.util.sync.task;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -86,13 +87,20 @@ public class ActiveWaitingSynchronizedTaskTest {
 		@Override
 		protected void waiting(ILock lock) throws Exception {
 
+			final String msg = format("Could %sacquire lock after %d seconds.", "%s", getLeaseUnit().toSeconds(getLeaseTime()));
+			final String not = "not ";
+
 			try {
-				if (!lock.tryLock(lock.getRemainingLeaseTime() + 1_000, TimeUnit.MILLISECONDS, getLeaseTime(),
-						getLeaseUnit())) {
-					throw new Exception("Could not acquire lock after 30 seconds.");
+				if (lock.tryLock(lock.getRemainingLeaseTime() + 1_000, TimeUnit.MILLISECONDS, getLeaseTime(), getLeaseUnit())) {
+					logInfo(format(msg, ""));
+				} else {
+					final String warnStr = format(msg, not);
+					logWarn(warnStr);
+					throw new RuntimeException(warnStr);
 				}
 			} catch (InterruptedException e) {
-				throw new Exception("InterruptedException: Could not acquire lock after 30 seconds.");
+				logError(format("InterruptedException: " + msg, not), e);
+				throw e;
 			}
 
 		}
