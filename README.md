@@ -1,4 +1,4 @@
-This util helps to synchronize task over several nodes. It integrates [Hazelcast](https://hazelcast.com) for server clustering.
+This util helps to synchronize tasks over several nodes. It integrates [Hazelcast](https://hazelcast.com) for server clustering.
 
 # Configuration
 
@@ -16,7 +16,7 @@ The hz-util can be injected via Maven.
 
 
 ## Hazelcast configuration
-It needs an valid (cluster) hazelcast configuration. There are several ways (Java, XML, Cluster/Client, only Cluster etc.) to create a Hazelcast instance. Make yourself familiar with the Hazelcast principles.
+It needs an valid (cluster) Hazelcast configuration. There are several ways (Java, XML, Cluster/Client, only Cluster etc.) to create a Hazelcast instance. Make yourself familiar with the Hazelcast principles.
 
 ### Hazelcast XML configuration (only cluster)
 
@@ -37,7 +37,7 @@ It needs an valid (cluster) hazelcast configuration. There are several ways (Jav
 
     <!-- XML skeleton file -->
     <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                xsi:schemaLocation="http://www.hazelcast.com/schema/config 
+                xsi:schemaLocation="http://www..com/schema/config 
                                     http://www.hazelcast.com/schema/config/hazelcast-config-3.9.xsd" 
                 xmlns="http://www.hazelcast.com/schema/config"> 
      

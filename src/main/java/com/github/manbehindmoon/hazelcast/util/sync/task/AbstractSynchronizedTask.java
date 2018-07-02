@@ -40,8 +40,8 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	 * @param maxLeaseTime         this is the max lease time a thread can be locked
 	 * @param maxLeaseTimeUnit     the time unit for the max lease time
 	 */
-	public AbstractSynchronizedTask(final HazelcastInstance hzInstance, String key, long minLeaseTimeInMillis,
-			long maxLeaseTime, TimeUnit maxLeaseTimeUnit) {
+	public AbstractSynchronizedTask(final HazelcastInstance hzInstance, final String key, final long minLeaseTimeInMillis,
+			final long maxLeaseTime, final TimeUnit maxLeaseTimeUnit) {
 
 		Assert.notNull(hzInstance, "hazelcast instance is not allowed to be null.");
 		Assert.notNull(key, "key is not allowed to be null.");
@@ -56,7 +56,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 		this.minLeaseTimeInMillis = minLeaseTimeInMillis;
 		this.leaseTime = maxLeaseTime;
 		this.leaseUnit = maxLeaseTimeUnit;
-		this.logPrefix = "[Thread key: " + this.key + "] ";
+		this.logPrefix = format("[sync task key: %s] ", this.key);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 			lock.lock(leaseTime, leaseUnit);
 		}
 
-		long startTime = System.currentTimeMillis();
+		final long startTime = System.currentTimeMillis();
 
 		try {
 
@@ -98,7 +98,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 			logInfo("Finished task()");
 
 			// calculate min lease time
-			long runTime = System.currentTimeMillis() - startTime;
+			final long runTime = System.currentTimeMillis() - startTime;
 			if (runTime < minLeaseTimeInMillis) {
 				logInfo(format("Runtime was '%d' and therefore minimum lease time [%d] is active.", runTime,
 						minLeaseTimeInMillis));

@@ -21,64 +21,57 @@ public class ActiveWaitingSynchronizedTaskTest {
 
 	private static final CountDownLatch latch = new CountDownLatch(2);
 
-	private static TestHazelcastInstanceFactory hazelcastFactory = new TestHazelcastInstanceFactory(1);
+	private static TestHazelcastInstanceFactory hazelcastFactory = new TestHazelcastInstanceFactory();
 
-    private SynchronizedTask synchronizedService1;
-    
-    private SynchronizedTask synchronizedService2;
+	private SynchronizedTask synchronizedService1;
 
-    @Before
-    public void setup() {
+	private SynchronizedTask synchronizedService2;
 
-        HazelcastInstance node = hazelcastFactory.newHazelcastInstance();
-        HazelcastTestSupport.warmUpPartitions(node);
-        String uuid =  HazelcastTestSupport.generateKeyOwnedBy(node);
-        synchronizedService1 = new ActiveWaitingSynchronizedService(node, uuid);
-        synchronizedService2 = new ActiveWaitingSynchronizedService(node, uuid);
-    }
-
+	@Before
+	public void setup() {
+		HazelcastInstance node = hazelcastFactory.newHazelcastInstance();
+		HazelcastTestSupport.warmUpPartitions(node);
+		String uuid = HazelcastTestSupport.generateKeyOwnedBy(node);
+		synchronizedService1 = new ActiveWaitingSynchronizedService(node, uuid);
+		synchronizedService2 = new ActiveWaitingSynchronizedService(node, uuid);
+	}
 
 	@After
 	public void tearDown() {
-
-		hazelcastFactory.shutdownAll();
+		// hazelcastFactory.shutdownAll();
+		hazelcastFactory.terminateAll();
 	}
-	
-	 
-    @Test
-    public void testWaitWithTwoInstancesThread() throws Exception {
 
-        assertEquals(2, latch.getCount());
-        
-        new Thread() {
-        	
-        	@Override
-        	public void run() {
-        		 synchronizedService1.runSynchronizedTask();
-        	};
-        	
-        	
-        }.start();
-        
-        Thread.sleep(500);
-        
-        synchronizedService2.runSynchronizedTask();
-      
-        assertTrue(latch.await(10, TimeUnit.SECONDS));
+	@Test
+	public void testWaitWithTwoInstancesThread() throws Exception {
 
-    }
+		assertEquals(2, latch.getCount());
 
+		new Thread() {
+
+			@Override
+			public void run() {
+				synchronizedService1.runSynchronizedTask();
+			};
+
+		}.start();
+
+		Thread.sleep(500);
+
+		synchronizedService2.runSynchronizedTask();
+
+		assertTrue(latch.await(10, TimeUnit.SECONDS));
+
+	}
 
 	private static class ActiveWaitingSynchronizedService extends AbstractSynchronizedTask {
 
 		public ActiveWaitingSynchronizedService(HazelcastInstance hzInstance, String key) {
-
 			super(hzInstance, key, 2000L, 5L, TimeUnit.SECONDS);
 		}
 
 		@Override
 		public void task() {
-
 			assertTrue(latch.getCount() > 0);
 			latch.countDown();
 			System.out.println(String.format("[%s] %s: actual count '%d'", getClass().getSimpleName(), getKey(),
@@ -87,7 +80,6 @@ public class ActiveWaitingSynchronizedTaskTest {
 
 		@Override
 		protected boolean isWaitingActive() {
-
 			return true;
 		}
 
