@@ -28,7 +28,7 @@ It needs an valid (cluster) Hazelcast configuration. There are several ways (Jav
             XmlConfigBuilder configBuilder = new XmlConfigBuilder(res.getURL());
             return Hazelcast.newHazelcastInstance(configBuilder.build());
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "No Hazelcast instance could not have been established", e);
+            LOG.error("No Hazelcast instance could not have been established", e);
             throw e;
         }
     }
