@@ -186,7 +186,7 @@ public abstract class AbstractSynchronizedTask implements SynchronizedTask {
 	}
 
 	private void logError(String msg, Throwable e) {
-		LOG.error(logPrefix + "Unexpected error.", e);
+		LOG.error(logPrefix + msg, e);
 	}
 
 	private static class Assert {
