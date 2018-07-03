@@ -1,5 +1,6 @@
 package com.github.manbehindmoon.hazelcast.util.sync.task;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -73,7 +74,7 @@ public class DefaultNonWaitingSynchronizedTaskTest {
 		public void task() {
 			assertTrue(latch.getCount() > 0);
 			latch.countDown();
-			System.out.println(String.format("[%s] %s: actual count '%d'", getClass().getSimpleName(), getKey(), latch.getCount()));
+			logInfo(format("actual count '%d'", latch.getCount()));
 
 		}
 

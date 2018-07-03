@@ -1,23 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>com.github.manbehindmoon</groupId>
-    <artifactId>hazelcast-synchronized-task</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    
-    <name>Hazelcast Synchronized Task</name>
-    <description>Abstract implementation of the Hazelcast ILock to sychronize services and tasks.</description>
-    <url>https://github.com/ManBehindMooN/hazelcast-synchronized-task</url>
+	<modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <jdk.version>1.8</jdk.version>
-    </properties>
+	<groupId>com.github.manbehindmoon</groupId>
+	<artifactId>hazelcast-synchronized-task</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Hazelcast Synchronized Task</name>
+	<description>Abstract implementation of the Hazelcast ILock to sychronize services and tasks.</description>
+	<url>https://github.com/ManBehindMooN/hazelcast-synchronized-task</url>
+
+	<properties>
+		<jdk.version>1.8</jdk.version>
+	</properties>
 
 	<build>
-	
-	    <finalName>hazelcast-util-synchronized-task</finalName>
+
+		<finalName>hazelcast-util-synchronized-task</finalName>
 
 		<plugins>
 
@@ -51,37 +53,52 @@
 
 	<!-- general dependency for all profiles -->
 	<dependencies>
-	
+
 		<!-- https://mvnrepository.com/artifact/com.hazelcast/hazelcast -->
 		<dependency>
-		    <groupId>com.hazelcast</groupId>
-		    <artifactId>hazelcast</artifactId>
-		    <version>3.10.2</version>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<version>3.10.2</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.25</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
 		</dependency>
-		
+
+		<!-- TEST dependencies -->
+
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<version>3.10.2</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
-		    <version>4.12</version>
-		    <scope>test</scope>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
-		
+
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
 		<dependency>
-	        <groupId>com.hazelcast</groupId>
-	        <artifactId>hazelcast</artifactId>
-	        <version>3.10.2</version>
-	        <classifier>tests</classifier>
-	        <scope>test</scope>
-	  </dependency>
-		
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 </project>
