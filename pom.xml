@@ -1,12 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>hazelcast-util</groupId>
-    <artifactId>synchronized-task</artifactId>
+    
+    <groupId>com.github.manbehindmoon</groupId>
+    <artifactId>hazelcast-synchronized-task</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <url></url>
-    <name>Hazelcast Synchronized Task</name>
     <packaging>jar</packaging>
+    
+    <name>Hazelcast Synchronized Task</name>
+    <description>Abstract implementation of the Hazelcast ILock to sychronize services and tasks.</description>
+    <url>https://github.com/ManBehindMooN/hazelcast-synchronized-task</url>
 
     <properties>
         <jdk.version>1.8</jdk.version>

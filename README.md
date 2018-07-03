@@ -8,8 +8,8 @@ In order to guarantee the full functionality of the hz-util these following conf
 The hz-util can be injected via Maven.
 
     <dependency>
-        <groupId>hz-util</groupId>
-        <artifactId>synchronized-task</artifactId>
+        <groupId>com.github.manbehindmoon</groupId>
+        <artifactId>hazelcast-synchronized-task</artifactId>
         <version>${project.version}</version>
     </dependency>
     
